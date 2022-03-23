@@ -25,6 +25,7 @@ jobs:
         with:
             commit_message: Copy all.yaml
   publish:
+      environment: production
       container:
        image:  google/dart:latest
       runs-on: ubuntu-latest
