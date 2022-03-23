@@ -25,7 +25,7 @@ jobs:
             commit_message: Copy all.yaml
       
       - name: Publish Dart Package
-        if: steps.auto-commit-action.outputs.changes_detected == 'false'
+       # if: steps.auto-commit-action.outputs.changes_detected == 'false'
         uses: icorbrey/publish-dart-package@v1.0.3
         with:
           credentials: ${{ secrets.CREDENTIALS_JSON }}
