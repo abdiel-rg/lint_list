@@ -27,9 +27,7 @@ jobs:
         with:
             commit_message: Copy all.yaml
       
-      - name: Publish Dart Package
        # if: steps.auto-commit-action.outputs.changes_detected == 'false'
-
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: pub get
