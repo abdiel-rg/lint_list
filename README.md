@@ -4,6 +4,15 @@ This package gets the lints from the [linter](https://pub.dev/packages/linter) p
 
 It also gets automatically updated every now and then using GitHub Actions.
 
+## Installation
+
+Add this package to the `dev_dependencies` section of the `pubspec.yaml` file:
+
+```yaml
+dev_dependencies:
+    lint_list:
+```
+
 ## Usage
 
 After installing the package, replace the line that starts with `include`, in the `analysis_options.yaml` file, with this line:
