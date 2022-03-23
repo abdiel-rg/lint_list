@@ -23,13 +23,13 @@ jobs:
           Set-Location ".\lib";
           [string]$data = curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml";
           [string]$file = Get-Content "./all.yaml";
-          Write-Output "::set-env name=shouldCommit::$($data.Length -ne $file.Length)}";
+          Write-Output "::set-output name=shouldCommit::$($data.Length -ne $file.Length)}";
           Set-Content -Path "./all.yaml" -Value $data;
 
           
 
       - name: Update version
-        if: $shouldCommit == "True"
+        if: steps.vars.outputs.shouldCommit == "True"
         shell: pwsh
  
         run: |
@@ -72,6 +72,6 @@ jobs:
         - name: Check Publish Warnings
           run: pub publish --dry-run
         - name: Publish Package
-          if: $shouldCommit == "True"
+          if: steps.vars.outputs.shouldCommit == "True"
           run: pub publish -f
 
