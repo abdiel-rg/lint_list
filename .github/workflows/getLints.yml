@@ -24,10 +24,8 @@ jobs:
           [string]$data = curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml";
           [string]$file = Get-Content "./all.yaml";
           Write-Output "::set-output name=shouldCommit::$($data.Length -ne $file.Length)}";
-          Set-Content -Path "./all.yaml" -Value $data;
-
+          curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml" -O;
           
-
       - name: Update version
         if: steps.save_file.outputs.shouldCommit == 'True'
         shell: pwsh
@@ -72,6 +70,5 @@ jobs:
         - name: Check Publish Warnings
           run: pub publish --dry-run
         - name: Publish Package
-          if: steps.save_file.outputs.shouldCommit == 'True'
           run: pub publish -f
 
