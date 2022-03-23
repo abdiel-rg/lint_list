@@ -1,39 +1,18 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Lint_List
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+This package gets the lints from the [linter](https://pub.dev/packages/linter) package, specifically the ones from this path: `linter/example/all.yaml`, and makes them available for use.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+It also gets automatically updated every now and then using GitHub Actions.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+After installing the package, replace the line that starts with `include`, in the `analysis_options.yaml` file, with this line:
 
-```dart
-const like = 'sample';
+```yaml
+include: package:lint_list/all.yaml
 ```
 
-## Additional information
+### Why do I have to replace the line and not paste the previous line below it?
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+According to the [**Customizing static analysis**](https://dart.dev/guides/language/analysis-options#the-analysis-options-file) guide on [dart.dev](https://dart.dev):
+*"YAML doesn’t allow duplicate keys, you can include at most one file"*.
