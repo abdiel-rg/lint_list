@@ -33,8 +33,6 @@ jobs:
                # if: steps.auto-commit-action.outputs.changes_detected == 'false'
         - name: Install dependencies
           run: pub get
-        - name: Run tests
-          run: pub run test
         - name: Setup Pub Credentials
           shell: bash
           env:
