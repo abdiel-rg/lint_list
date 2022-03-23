@@ -9,8 +9,6 @@ on:
 
 jobs:
   getLints:
-    container:
-       image:  google/dart:latest
     environment: production
     runs-on: ubuntu-latest
     steps:
@@ -26,24 +24,28 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4.14.0
         with:
             commit_message: Copy all.yaml
-      
-       # if: steps.auto-commit-action.outputs.changes_detected == 'false'
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: pub get
-      - name: Run tests
-        run: pub run test
-      - name: Setup Pub Credentials
-        shell: bash
-        env:
-          PUB_DEV_PUBLISH_ACCESS_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}
-          PUB_DEV_PUBLISH_REFRESH_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_REFRESH_TOKEN }}
-          PUB_DEV_PUBLISH_TOKEN_ENDPOINT: ${{ secrets.PUB_DEV_PUBLISH_TOKEN_ENDPOINT }}
-          PUB_DEV_PUBLISH_EXPIRATION: ${{ secrets.PUB_DEV_PUBLISH_EXPIRATION }}
-        run: |
-          sh ./pub_login.sh
-      - name: Check Publish Warnings
-        run: pub publish --dry-run
-      - name: Publish Package
-        run: pub publish -f
+  publish:
+      container:
+       image:  google/dart:latest
+      runs-on: ubuntu-latest
+      steps: 
+        - uses: actions/checkout@v2
+               # if: steps.auto-commit-action.outputs.changes_detected == 'false'
+        - name: Install dependencies
+          run: pub get
+        - name: Run tests
+          run: pub run test
+        - name: Setup Pub Credentials
+          shell: bash
+          env:
+            PUB_DEV_PUBLISH_ACCESS_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}
+            PUB_DEV_PUBLISH_REFRESH_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_REFRESH_TOKEN }}
+            PUB_DEV_PUBLISH_TOKEN_ENDPOINT: ${{ secrets.PUB_DEV_PUBLISH_TOKEN_ENDPOINT }}
+            PUB_DEV_PUBLISH_EXPIRATION: ${{ secrets.PUB_DEV_PUBLISH_EXPIRATION }}
+          run: |
+            sh ./pub_login.sh
+        - name: Check Publish Warnings
+          run: pub publish --dry-run
+        - name: Publish Package
+          run: pub publish -f
 
