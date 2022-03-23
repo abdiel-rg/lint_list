@@ -17,8 +17,34 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Save all.yaml file
+        id: save_file
         shell: pwsh
-        run: curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml" -o lib/all.yaml
+        run: |
+          Set-Location ".\lib";
+          [string]$data = curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml";
+          [string]$file = Get-Content "./all.yaml";
+          Write-Output "::set-env name=shouldCommit::$($data.Length -ne $file.Length)}";
+          Set-Content -Path "./all.yaml" -Value $data;
+
+          
+
+      - name: Update version
+        if: $shouldCommit = "True"
+        shell: pwsh
+ 
+        run: |
+          [string]$filePath = "./pubspec.yaml";
+          [string]$regexFile = "version: 1.0.(\d+)";
+          $file = Get-Content $filePath -Raw;
+
+          $file -match $regexFile;
+
+          [int]$versionNumber = $Matches[1];
+          [int]$newVersionNumber = $versionNumber + 1;
+
+          ($file -replace $regexFile, "version: 1.0.$newVersionNumber").Trim() | Set-Content $filePath;
+
+          Add-Content -Path ".\CHANGELOG.md" -Value "`n## 1.0.$newVersionNumber";
       
       - name: Commit if file changed
         uses: stefanzweifel/git-auto-commit-action@v4.14.0
@@ -46,5 +72,6 @@ jobs:
         - name: Check Publish Warnings
           run: pub publish --dry-run
         - name: Publish Package
+          if: $shouldCommit = "True"
           run: pub publish -f
 
