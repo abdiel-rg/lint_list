@@ -1,0 +1,26 @@
+name: getLints
+
+on:
+  schedule:
+  - cron: "0 0 * * *"  # Run every day
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  getLints:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a set of commands using the runners shell
+      - name: Save all.yaml file
+        shell: pwsh
+        run: curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml" -o lib/all.yaml
+      
+      - name: Commit if file changed
+        uses: stefanzweifel/git-auto-commit-action@v4.14.0
+        with:
+            commit_message: Copy all.yaml
+        
