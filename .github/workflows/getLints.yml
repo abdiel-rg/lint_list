@@ -10,7 +10,8 @@ on:
 jobs:
   getLints:
     strategy:
-      max-parallel: 1
+      max-parallel: 0
+      fail-fast: true
     environment: production
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +29,6 @@ jobs:
           [bool]$should_commit = $data.Length -ne $file.Length;
           Write-Output "::set-output name=shouldCommit::$should_commit";
           Write-Output "SHOULD_COMMIT=$should_commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-          Write-Output -InputObject ${{ Env.SHOULD_COMMIT }}
           curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml" -O;
           
       - name: Update version
