@@ -54,6 +54,7 @@ jobs:
         with:
             commit_message: Copy all.yaml
   publish:
+      needs: [getLints]
       environment: production
       container:
        image:  google/dart:latest
