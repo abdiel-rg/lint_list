@@ -40,7 +40,7 @@ jobs:
           [string]$regexFile = "version: 1.0.(\d+)";
           $file = Get-Content $filePath -Raw;
 
-          $file -match $regexFiele;
+          $file -match $regexFile;
 
           [int]$versionNumber = $Matches[1];
           [int]$newVersionNumber = $versionNumber + 1;
