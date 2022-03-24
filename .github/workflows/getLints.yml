@@ -58,7 +58,7 @@ jobs:
         with:
             commit_message: Copy all.yaml
   publish:
-      if: steps.save_file.outputs.should_commit == 'True' 
+      if: ${{ env.SHOULD_COMMIT }} == 'True'
       needs: [getLints]
 #       environment: production
       container:
