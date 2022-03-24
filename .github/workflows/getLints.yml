@@ -32,7 +32,7 @@ jobs:
           curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml" -O;
           
       - name: Update version
-        if: ${{ SHOULD_COMMIT }} == 'True'
+        if: ${{ Env.SHOULD_COMMIT }} == 'True'
         shell: pwsh
         run: |
           Write-Output ${{ SHOULD_COMMIT}}
