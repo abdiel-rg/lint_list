@@ -7,15 +7,12 @@ on:
     branches: [ main ]
   workflow_dispatch:
   
-env:
-  SHOULD_COMMIT: False
-
 jobs:
   getLints:
     strategy:
       max-parallel: 0
       fail-fast: true
-    environment: env
+    environment: production
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -35,15 +32,15 @@ jobs:
           curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml" -O;
           
       - name: Update version
-        if: ${{ env.SHOULD_COMMIT }} == 'True'
+        if: ${{ SHOULD_COMMIT }} == 'True'
         shell: pwsh
         run: |
-          Write-Output ${{ Env.SHOULD_COMMIT}}
+          Write-Output ${{ SHOULD_COMMIT}}
           [string]$filePath = "./pubspec.yaml";
           [string]$regexFile = "version: 1.0.(\d+)";
           $file = Get-Content $filePath -Raw;
 
-          $file -match $regexFile;
+          $file -match $regexFiele;
 
           [int]$versionNumber = $Matches[1];
           [int]$newVersionNumber = $versionNumber + 1;
@@ -57,9 +54,9 @@ jobs:
         with:
             commit_message: Copy all.yaml
   publish:
-      if: ${{ env.SHOULD_COMMIT }} == 'True'
+      if: ${{ SHOULD_COMMIT }} == 'True'
       needs: [getLints]
-      environment: env
+      environment: production
       container:
        image:  google/dart:latest
       runs-on: ubuntu-latest
@@ -70,7 +67,7 @@ jobs:
           
         - name: Print SHOULD_COMMIT
           shell: pwsh
-          run: Write-Output ${{ Env.SHOULD_COMMIT }}
+          run: Write-Output ${{ SHOULD_COMMIT }}
           
         - name: Setup Pub Credentials
           shell: bash
@@ -86,6 +83,6 @@ jobs:
           run: pub publish --dry-run
           
         - name: Publish Package
-          if: ${{ Env.SHOULD_COMMIT }} == 'True'
+          if: ${{ SHOULD_COMMIT }} == 'True'
           run: pub publish -f
 
