@@ -15,7 +15,7 @@ jobs:
     strategy:
       max-parallel: 0
       fail-fast: true
-#     environment: production
+    environment: env
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -34,9 +34,8 @@ jobs:
           Write-Output "SHOULD_COMMIT=$should_commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
           curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml" -O;
           
-        
       - name: Update version
-        if: ${{ Env.SHOULD_COMMIT }} == 'True'
+        if: ${{ env.SHOULD_COMMIT }} == 'True'
         shell: pwsh
         run: |
           Write-Output ${{ Env.SHOULD_COMMIT}}
@@ -58,9 +57,9 @@ jobs:
         with:
             commit_message: Copy all.yaml
   publish:
-      if: ${{ Env.SHOULD_COMMIT }} == 'True'
+      if: ${{ env.SHOULD_COMMIT }} == 'True'
       needs: [getLints]
-#       environment: production
+      environment: env
       container:
        image:  google/dart:latest
       runs-on: ubuntu-latest
