@@ -1,10 +1,10 @@
 name: lint_list
 
-description: This package gets the lints from the linter package, specifically the ones from this path, 'linter/example/all.yaml', and makes them available for use. It also gets automatically updated every now and then using GitHub Actions.
+description: This package gets the lints from the linter package, specifically the ones from this path, 'linter/example/all.yaml', and makes them available for use.
 
 repository: https://github.com/abdiel-rg/lint_list
 
-version: 1.0.4
+version: 1.0.5
 
 environment:
   sdk: '>=2.15.1 <3.0.0'
