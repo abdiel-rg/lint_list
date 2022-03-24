@@ -30,7 +30,7 @@ jobs:
           curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml" -O;
           
       - name: Update version
-        if: $SHOULD_COMMIT == 'True'
+        if: ${{ env.SHOULD_COMMIT }} == 'True'
         shell: pwsh
  
         run: |
@@ -73,6 +73,6 @@ jobs:
         - name: Check Publish Warnings
           run: pub publish --dry-run
         - name: Publish Package
-          if: $SHOULD_COMMIT == 'True'
+          if: ${{ env.SHOULD_COMMIT }} == 'True'
           run: pub publish -f
 
