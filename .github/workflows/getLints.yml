@@ -53,8 +53,12 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4.14.0
         with:
             commit_message: Copy all.yaml
+            
+    outputs:
+      should_commit: Env.SHOULD_COMMIT
+          
   publish:
-      if: ${{ Env.SHOULD_COMMIT }} == 'True'
+      if: ${{ needs.getLints.outputs.shouldCommit }} == 'True'
       needs: [getLints]
       environment: production
       container:
@@ -67,7 +71,7 @@ jobs:
           
         - name: Print SHOULD_COMMIT
           shell: pwsh
-          run: Write-Output ${{ Env.SHOULD_COMMIT }}
+          run: Write-Output ${{ needs.getLints.outputs.shouldCommit }}
           
         - name: Setup Pub Credentials
           shell: bash
@@ -83,6 +87,6 @@ jobs:
           run: pub publish --dry-run
           
         - name: Publish Package
-          if: ${{ Env.SHOULD_COMMIT }} == 'True'
+          if: ${{ needs.getLints.outputs.shouldCommit }} == 'True'
           run: pub publish -f
 
