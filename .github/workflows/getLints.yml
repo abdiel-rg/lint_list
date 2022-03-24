@@ -25,12 +25,12 @@ jobs:
           [string]$file = Get-Content "./all.yaml";
           [bool]$should_commit = $data.Length -ne $file.Length;
           Write-Output "::set-output name=shouldCommit::$should_commit";
-          Write-Output "SHOULD_COMMIT=$should_commit" >> $GITHUB_ENV
+          Write-Output "SHOULD_COMMIT=$should_commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output ${{ SHOULD_COMMIT }}
           curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml" -O;
           
       - name: Update version
-        if: ${{ env.SHOULD_COMMIT }} == 'True'
+        if: ${{ Env.SHOULD_COMMIT }} == 'True'
         shell: pwsh
  
         run: |
@@ -73,6 +73,6 @@ jobs:
         - name: Check Publish Warnings
           run: pub publish --dry-run
         - name: Publish Package
-          if: ${{ env.SHOULD_COMMIT }} == 'True'
+          if: ${{ Env.SHOULD_COMMIT }} == 'True'
           run: pub publish -f
 
