@@ -6,13 +6,16 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  
+env:
+  SHOULD_COMMIT: False
 
 jobs:
   getLints:
     strategy:
       max-parallel: 0
       fail-fast: true
-    environment: production
+#     environment: production
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -33,8 +36,7 @@ jobs:
           
         
       - name: Update version
-#         if: ${{ env.SHOULD_COMMIT }} == 'True'
-        if: steps.save_file.outputs.should_commit == 'True' 
+        if: ${{ env.SHOULD_COMMIT }} == 'True'
         shell: pwsh
         run: |
           Write-Output ${{ Env.SHOULD_COMMIT}}
@@ -58,7 +60,7 @@ jobs:
   publish:
       if: steps.save_file.outputs.should_commit == 'True' 
       needs: [getLints]
-      environment: production
+#       environment: production
       container:
        image:  google/dart:latest
       runs-on: ubuntu-latest
