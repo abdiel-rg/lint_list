@@ -36,7 +36,7 @@ jobs:
           
         
       - name: Update version
-        if: ${{ env.SHOULD_COMMIT }} == 'True'
+        if: ${{ Env.SHOULD_COMMIT }} == 'True'
         shell: pwsh
         run: |
           Write-Output ${{ Env.SHOULD_COMMIT}}
@@ -58,7 +58,7 @@ jobs:
         with:
             commit_message: Copy all.yaml
   publish:
-      if: ${{ env.SHOULD_COMMIT }} == 'True'
+      if: ${{ Env.SHOULD_COMMIT }} == 'True'
       needs: [getLints]
 #       environment: production
       container:
