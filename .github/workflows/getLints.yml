@@ -35,7 +35,7 @@ jobs:
         if: ${{ Env.SHOULD_COMMIT }} == 'True'
         shell: pwsh
         run: |
-          Write-Output ${{ SHOULD_COMMIT}}
+          Write-Output ${{ Env.SHOULD_COMMIT}}
           [string]$filePath = "./pubspec.yaml";
           [string]$regexFile = "version: 1.0.(\d+)";
           $file = Get-Content $filePath -Raw;
@@ -54,7 +54,7 @@ jobs:
         with:
             commit_message: Copy all.yaml
   publish:
-      if: ${{ SHOULD_COMMIT }} == 'True'
+      if: ${{ Env.SHOULD_COMMIT }} == 'True'
       needs: [getLints]
       environment: production
       container:
@@ -67,7 +67,7 @@ jobs:
           
         - name: Print SHOULD_COMMIT
           shell: pwsh
-          run: Write-Output ${{ SHOULD_COMMIT }}
+          run: Write-Output ${{ Env.SHOULD_COMMIT }}
           
         - name: Setup Pub Credentials
           shell: bash
@@ -83,6 +83,6 @@ jobs:
           run: pub publish --dry-run
           
         - name: Publish Package
-          if: ${{ SHOULD_COMMIT }} == 'True'
+          if: ${{ Env.SHOULD_COMMIT }} == 'True'
           run: pub publish -f
 
