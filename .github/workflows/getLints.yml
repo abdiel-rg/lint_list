@@ -36,6 +36,7 @@ jobs:
         shell: pwsh
  
         run: |
+          Write-Output ${{ Env.SHOULD_COMMIT}}
           [string]$filePath = "./pubspec.yaml";
           [string]$regexFile = "version: 1.0.(\d+)";
           $file = Get-Content $filePath -Raw;
@@ -64,6 +65,11 @@ jobs:
                # if: steps.auto-commit-action.outputs.changes_detected == 'false'
         - name: Install dependencies
           run: pub get
+          
+        - name: Print SHOULD_COMMIT
+          shell: pwsh
+          run: Write-Output ${{ Env.SHOULD_COMMIT }}
+          
         - name: Setup Pub Credentials
           shell: bash
           env:
@@ -73,8 +79,10 @@ jobs:
             PUB_DEV_PUBLISH_EXPIRATION: ${{ secrets.PUB_DEV_PUBLISH_EXPIRATION }}
           run: |
             sh ./pub_login.sh
+            
         - name: Check Publish Warnings
           run: pub publish --dry-run
+          
         - name: Publish Package
           if: ${{ Env.SHOULD_COMMIT }} == 'True'
           run: pub publish -f
