@@ -2,7 +2,7 @@ name: getLints
 
 on:
   schedule:
-  - cron: "0 0 * * *"  # Run every day
+  - cron: "0 0 * * 0"  # Run every week
   push:
     branches: [ main ]
   workflow_dispatch:
