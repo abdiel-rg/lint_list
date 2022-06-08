@@ -64,7 +64,6 @@ jobs:
           Write-Output "::set-output name=latest_version_local::1.0.$([int]$Matches[1])";
           Write-Output "::set-output name=latest_version_pub_dev::$((curl "https://pub.dev/api/packages/lint_list" -s | ConvertFrom-Json).latest.version)";
           
-          
       - name: Print variables
         id: print_variables
         shell: pwsh
@@ -99,9 +98,9 @@ jobs:
         - name: Print SHOULD_COMMIT
           shell: pwsh
           run: |
-            Write-Output shouldCommit: ${{ needs.getLints.outputs.shouldCommit }}
-            Write-Output shouldCommit: ${{ needs.getLints.outputs.latest_version_local }}
-            Write-Output shouldCommit: ${{ needs.getLints.outputs.latest_version_pub_dev }}
+            Write-Output "shouldCommit: ${{ needs.getLints.outputs.shouldCommit }}"
+            Write-Output "shouldCommit: ${{ needs.getLints.outputs.latest_version_local }}"
+            Write-Output "shouldCommit: ${{ needs.getLints.outputs.latest_version_pub_dev }}"
           
         - name: Setup Pub Credentials
           shell: bash
