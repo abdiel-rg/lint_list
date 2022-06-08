@@ -39,7 +39,7 @@ jobs:
           
       - name: Update version
         id: update_version
-        if: steps.save_file.outputs.shouldCommit == 'True'
+#         if: steps.save_file.outputs.shouldCommit == 'True'
         shell: pwsh
         run: |
           Write-Output ${{ Env.SHOULD_COMMIT}}
