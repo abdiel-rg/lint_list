@@ -34,7 +34,8 @@ jobs:
           
       - name: Print SHOULD_COMMIT
         shell: pwsh
-        run: Write-Output ${{ needs.getLints.outputs.shouldCommit }}
+        run: |
+          Write-Output "ShouldCommit: ${{ steps.save_file.outputs.shouldCommit }}"
           
       - name: Update version
         if: steps.save_file.outputs.shouldCommit == 'True'
