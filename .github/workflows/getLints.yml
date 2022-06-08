@@ -86,7 +86,7 @@ jobs:
         - name: Print SHOULD_COMMIT
           shell: pwsh
           run: |
-            Write-Output ${{ needs.getLints.outputs.shouldCommit }}
+            Write-Output "shouldCommit: ${{ needs.getLints.outputs.shouldCommit }}"
           
         - name: Setup Pub Credentials
           shell: bash
