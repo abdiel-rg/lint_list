@@ -28,18 +28,18 @@ jobs:
           [string]$file = Get-Content "./all.yaml";
           [bool]$should_commit = $data.Length -ne $file.Length;
           Write-Output "should_commit: $should_commit";
-          Write-Output "::set-output name=shouldCommit::$should_commit";
+          Write-Output "::set-output name=should_commit::$should_commit";
           Write-Output "SHOULD_COMMIT=$should_commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
           curl "https://raw.githubusercontent.com/dart-lang/linter/master/example/all.yaml" -O;
           
       - name: Print SHOULD_COMMIT
         shell: pwsh
         run: |
-          Write-Output "ShouldCommit: ${{ steps.save_file.outputs.shouldCommit }}"
+          Write-Output "should_commit: ${{ steps.save_file.outputs.should_commit }}"
           
       - name: Update version
         id: update_version
-        if: steps.save_file.outputs.shouldCommit == 'True'
+        if: steps.save_file.outputs.should_commit == 'True'
         shell: pwsh
         run: |
           Write-Output ${{ Env.SHOULD_COMMIT}}
@@ -70,7 +70,7 @@ jobs:
         run: |
           Write-Output latest_version_local: ${{ steps.version_variables.outputs.latest_version_local }}
           Write-Output latest_version_pub_dev: ${{ steps.version_variables.outputs.latest_version_pub_dev }}
-          Write-Output shouldCommit: ${{ steps.save_file.outputs.shouldCommit }}
+          Write-Output should_commit: ${{ steps.save_file.outputs.should_commit }}
       
       - name: Commit if file changed
         uses: stefanzweifel/git-auto-commit-action@v4.14.0
@@ -78,13 +78,12 @@ jobs:
             commit_message: Copy all.yaml
             
     outputs:
-#       should_commit: steps.save_file.outputs.shouldCommit
       latest_version_local: ${{ steps.version_variables.outputs.latest_version_local }}
       latest_version_pub_dev: ${{ steps.version_variables.outputs.latest_version_pub_dev }}
       should_commit: ${{ Env.SHOULD_COMMIT }}
           
   publish:
-      if: (needs.getLints.outputs.shouldCommit == 'True') || (needs.getLints.outputs.latest_version_local != needs.getLints.outputs.latest_version_pub_dev)
+      if: (needs.getLints.outputs.should_commit == 'True') || (needs.getLints.outputs.latest_version_local != needs.getLints.outputs.latest_version_pub_dev)
       needs: [getLints]
       environment: production
       container:
@@ -98,9 +97,9 @@ jobs:
         - name: Print SHOULD_COMMIT
           shell: pwsh
           run: |
-            Write-Output "shouldCommit: ${{ needs.getLints.outputs.shouldCommit }}"
-            Write-Output "shouldCommit: ${{ needs.getLints.outputs.latest_version_local }}"
-            Write-Output "shouldCommit: ${{ needs.getLints.outputs.latest_version_pub_dev }}"
+            Write-Output "should_commit: ${{ needs.getLints.outputs.should_commit }}"
+            Write-Output "latest_version_local: ${{ needs.getLints.outputs.latest_version_local }}"
+            Write-Output "latest_version_pub_dev: ${{ needs.getLints.outputs.latest_version_pub_dev }}"
           
         - name: Setup Pub Credentials
           shell: bash
@@ -116,6 +115,6 @@ jobs:
           run: pub publish --dry-run
           
         - name: Publish Package
-#           if: needs.getLints.outputs.shouldCommit == 'True'
+#           if: needs.getLints.outputs.should_commit == 'True'
           run: pub publish -f
 
