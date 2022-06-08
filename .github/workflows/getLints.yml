@@ -66,7 +66,7 @@ jobs:
           
   publish:
       if: needs.getLints.outputs.shouldCommit == 'True'
-      needs: [getLints]
+#       needs: [getLints]
       environment: production
       container:
        image:  google/dart:latest
