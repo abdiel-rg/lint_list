@@ -79,9 +79,9 @@ jobs:
             
     outputs:
 #       should_commit: steps.save_file.outputs.shouldCommit
-      latest_version_local: steps.version_variables.outputs.latest_version_local
-      latest_version_pub_dev: steps.version_variables.outputs.latest_version_pub_dev
-      should_commit: steps.save_file.outputs.shouldCommit
+      latest_version_local: ${{ steps.version_variables.outputs.latest_version_local }}
+      latest_version_pub_dev: ${{ steps.version_variables.outputs.latest_version_pub_dev }}
+      should_commit: ${{ steps.save_file.outputs.shouldCommit }}
           
   publish:
       if: (needs.getLints.outputs.shouldCommit == 'True') || (needs.getLints.outputs.latest_version_local != needs.getLints.outputs.latest_version_pub_dev)
