@@ -61,7 +61,7 @@ jobs:
         shell: pwsh
         run: |
           (Get-Content "./pubspec.yaml" -Raw) -match "version: 1.0.(\d+)";
-          Write-Output "::set-output name=latest_version_local::$Matches[1]";
+          Write-Output "::set-output name=latest_version_local::$([int]$Matches[1])";
           Write-Output "::set-output name=latest_version_pub_dev::$((curl "https://pub.dev/api/packages/lint_list" -s | ConvertFrom-Json).latest.version)";
           
           
