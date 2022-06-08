@@ -65,8 +65,8 @@ jobs:
       should_commit: Env.SHOULD_COMMIT
           
   publish:
-      if: needs.getLints.outputs.shouldCommit == 'True'
-#       needs: [getLints]
+#       if: needs.getLints.outputs.shouldCommit == 'True'
+      needs: [getLints]
       environment: production
       container:
        image:  google/dart:latest
