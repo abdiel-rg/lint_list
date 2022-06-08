@@ -72,7 +72,7 @@ jobs:
       should_commit: Env.SHOULD_COMMIT
           
   publish:
-      if: needs.getLints.outputs.shouldCommit == 'True' || latest_version_local != latest_version_pub_dev
+      if: needs.getLints.outputs.shouldCommit == 'True' || needs.getLints.outputs.latest_version_local != needs.getLints.outputs.latest_version_pub_dev
       needs: [getLints]
       environment: production
       container:
