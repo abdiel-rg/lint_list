@@ -56,7 +56,8 @@ jobs:
 
           Add-Content -Path ".\CHANGELOG.md" -Value "`n## 1.0.$newVersionNumber";
           
-      - name: Set version variables 
+      - name: Set version variables
+        id: version_variables
         shell: pwsh
         run: |
           (Get-Content "./pubspec.yaml" -Raw) -match "version: 1.0.(\d+)";
@@ -68,9 +69,9 @@ jobs:
         id: print_variables
         shell: pwsh
         run: |
-          Write-Output latest_version_local: ${{ needs.getLints.outputs.latest_version_local }}
-          Write-Output latest_version_pub_dev: ${{ needs.getLints.outputs.latest_version_pub_dev }}
-          Write-Output shouldCommit: ${{ needs.getLints.outputs.shouldCommit }}
+          Write-Output latest_version_local: ${{ steps.version_variables.outputs.latest_version_local }}
+          Write-Output latest_version_pub_dev: ${{ steps.version_variables.outputs.latest_version_pub_dev }}
+          Write-Output shouldCommit: ${{ steps.save_file.outputs.shouldCommit }}
       
       - name: Commit if file changed
         uses: stefanzweifel/git-auto-commit-action@v4.14.0
