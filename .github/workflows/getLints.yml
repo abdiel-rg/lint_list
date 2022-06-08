@@ -72,7 +72,7 @@ jobs:
       should_commit: Env.SHOULD_COMMIT
           
   publish:
-      if: needs.getLints.outputs.shouldCommit == 'True' || needs.getLints.outputs.latest_version_local != needs.getLints.outputs.latest_version_pub_dev
+      if: (needs.getLints.outputs.shouldCommit == 'True') || (needs.getLints.outputs.latest_version_local != needs.getLints.outputs.latest_version_pub_dev)
       needs: [getLints]
       environment: production
       container:
@@ -86,6 +86,8 @@ jobs:
         - name: Print SHOULD_COMMIT
           shell: pwsh
           run: |
+            Write-Output "shouldCommit: ${{ needs.getLints.outputs.latest_version_local }}"
+            Write-Output "shouldCommit: ${{ needs.getLints.outputs.latest_version_pub_dev }}"
             Write-Output "shouldCommit: ${{ needs.getLints.outputs.shouldCommit }}"
           
         - name: Setup Pub Credentials
