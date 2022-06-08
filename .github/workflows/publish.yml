@@ -1,0 +1,41 @@
+name: publish
+
+on:
+  workflow_dispatch:
+  
+jobs:
+publish:
+      if: (needs.getLints.outputs.shouldCommit == 'True') || (needs.getLints.outputs.latest_version_local != needs.getLints.outputs.latest_version_pub_dev)
+      needs: [getLints]
+      environment: production
+      container:
+       image:  google/dart:latest
+      runs-on: ubuntu-latest
+      steps: 
+        - uses: actions/checkout@v2
+        - name: Install dependencies
+          run: pub get
+          
+#         - name: Print SHOULD_COMMIT
+#           shell: pwsh
+#           run: |
+#             Write-Output shouldCommit: ${{ needs.getLints.outputs.latest_version_local }}
+#             Write-Output shouldCommit: ${{ needs.getLints.outputs.latest_version_pub_dev }}
+#             Write-Output shouldCommit: ${{ needs.getLints.outputs.shouldCommit }}
+          
+        - name: Setup Pub Credentials
+          shell: bash
+          env:
+            PUB_DEV_PUBLISH_ACCESS_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}
+            PUB_DEV_PUBLISH_REFRESH_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_REFRESH_TOKEN }}
+            PUB_DEV_PUBLISH_TOKEN_ENDPOINT: ${{ secrets.PUB_DEV_PUBLISH_TOKEN_ENDPOINT }}
+            PUB_DEV_PUBLISH_EXPIRATION: ${{ secrets.PUB_DEV_PUBLISH_EXPIRATION }}
+          run: |
+            sh ./pub_login.sh
+            
+        - name: Check Publish Warnings
+          run: pub publish --dry-run
+          
+        - name: Publish Package
+          if: needs.getLints.outputs.shouldCommit == 'True'
+          run: pub publish -f
