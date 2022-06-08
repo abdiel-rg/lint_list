@@ -58,7 +58,7 @@ jobs:
           
           Write-Output "::set-output name=latest_version_local::1.0.$newVersionNumber";
           
-          Write-Output "::set-output name=latest_version_pub_dev::(curl "https://pub.dev/api/packages/lint_list" -s | ConvertFrom-Json).latest.version";
+          Write-Output "::set-output name=latest_version_pub_dev::$((curl "https://pub.dev/api/packages/lint_list" -s | ConvertFrom-Json).latest.version)";
       
       - name: Commit if file changed
         uses: stefanzweifel/git-auto-commit-action@v4.14.0
