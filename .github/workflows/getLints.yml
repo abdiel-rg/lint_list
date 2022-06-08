@@ -65,7 +65,7 @@ jobs:
       should_commit: Env.SHOULD_COMMIT
           
   publish:
-      if: jobs.getLints.outputs.shouldCommit == 'True'
+      if: needs.getLints.outputs.shouldCommit == 'True'
       needs: [getLints]
       environment: production
       container:
