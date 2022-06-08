@@ -94,12 +94,12 @@ jobs:
         - name: Install dependencies
           run: pub get
           
-        - name: Print SHOULD_COMMIT
+        - name: Print variables
           shell: pwsh
           run: |
-            Write-Output "should_commit: ${{ needs.getLints.outputs.should_commit }}"
-            Write-Output "latest_version_local: ${{ needs.getLints.outputs.latest_version_local }}"
-            Write-Output "latest_version_pub_dev: ${{ needs.getLints.outputs.latest_version_pub_dev }}"
+            Write-Output "should_commit: ${{ needs.getLints.outputs.should_commit }}";
+            Write-Output "latest_version_local: ${{ needs.getLints.outputs.latest_version_local }}";
+            Write-Output "latest_version_pub_dev: ${{ needs.getLints.outputs.latest_version_pub_dev }}";
           
         - name: Setup Pub Credentials
           shell: bash
