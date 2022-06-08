@@ -38,6 +38,7 @@ jobs:
           Write-Output "ShouldCommit: ${{ steps.save_file.outputs.shouldCommit }}"
           
       - name: Update version
+        id: update_version
         if: steps.save_file.outputs.shouldCommit == 'True'
         shell: pwsh
         run: |
@@ -54,6 +55,10 @@ jobs:
           ($file -replace $regexFile, "version: 1.0.$newVersionNumber").Trim() | Set-Content $filePath;
 
           Add-Content -Path ".\CHANGELOG.md" -Value "`n## 1.0.$newVersionNumber";
+          
+          Write-Output "::set-output name=latest_version_local::1.0.$newVersionNumber";
+          
+          Write-Output "::set-output name=latest_version_pub_dev::(curl "https://pub.dev/api/packages/lint_list" -s | ConvertFrom-Json).latest.version";
       
       - name: Commit if file changed
         uses: stefanzweifel/git-auto-commit-action@v4.14.0
@@ -62,10 +67,12 @@ jobs:
             
     outputs:
 #       should_commit: steps.save_file.outputs.shouldCommit
+      latest_version_local: steps.update_version.outputs.latest_version_local
+      latest_version_pub_dev: steps.update_version.outputs.latest_version_pub_dev
       should_commit: Env.SHOULD_COMMIT
           
   publish:
-#       if: needs.getLints.outputs.shouldCommit == 'True'
+      if: needs.getLints.outputs.shouldCommit == 'True' || latest_version_local != latest_version_pub_dev
       needs: [getLints]
       environment: production
       container:
