@@ -78,6 +78,7 @@ linter:
     - hash_and_equals
     - implementation_imports
     - implicit_call_tearoffs
+    - implicit_reopen
     - invalid_case_patterns
     - iterable_contains_unrelated_type
     - join_return_with_assignment
@@ -165,6 +166,7 @@ linter:
     - tighten_type_of_initializing_formals
     - type_annotate_public_apis
     - type_init_formals
+    - type_literal_in_constant_pattern
     - unawaited_futures
     - unnecessary_await_in_return
     - unnecessary_brace_in_string_interps
