@@ -4,7 +4,7 @@ description: This package gets the lints from the linter package, specifically t
 
 repository: https://github.com/abdiel-rg/lint_list
 
-version: 1.0.35
+version: 1.0.36
 
 environment:
   sdk: '>=2.15.1 <3.0.0'
